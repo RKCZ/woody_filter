@@ -2,7 +2,6 @@
 for processing of raw epoch data passed as NumPy array and a wrapper function for python-MNE package. """
 
 from typing import Tuple
-import numpy.typing as npt
 
 import numpy as np
 import logging
@@ -15,7 +14,7 @@ def print_help():
 
 
 def woody_filter(epochs: Epochs, eps: float = 0.001, max_iterations: int = 100,
-                 template: npt.ArrayLike = None) -> Tuple[EpochsArray, np.ndarray, np.ndarray]:
+                 template=None) -> Tuple[EpochsArray, np.ndarray, np.ndarray]:
     """
     Woody filter for python-MNE module. Aligns Epochs to maximize correlation.
     :param epochs: mne.Epochs instance containing epochs of signal
@@ -29,8 +28,8 @@ def woody_filter(epochs: Epochs, eps: float = 0.001, max_iterations: int = 100,
     return EpochsArray(result, epochs.info), latencies, avg_correlations
 
 
-def woody_filter_raw(data: npt.ArrayLike, eps: float = 0.001, max_iterations: int = 100,
-                     template: npt.ArrayLike = None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def woody_filter_raw(data, eps: float = 0.001, max_iterations: int = 100,
+                     template=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Aligns input signal to maximize correlation.
     :param data: Numpy array
@@ -51,8 +50,8 @@ def woody_filter_raw(data: npt.ArrayLike, eps: float = 0.001, max_iterations: in
     return result, latencies, avg_correlations
 
 
-def __process_single_channel(epochs: npt.ArrayLike, eps: float, max_iterations: int,
-                             template: npt.ArrayLike = None) -> Tuple[np.ndarray, np.ndarray, float]:
+def __process_single_channel(epochs, eps: float, max_iterations: int,
+                             template=None) -> Tuple[np.ndarray, np.ndarray, float]:
     avg = np.mean(epochs, axis=0)
     n_epochs, n_times = np.shape(epochs)
     if template is None:  # If template is not specified use time-locked average
@@ -95,7 +94,7 @@ def __process_single_channel(epochs: npt.ArrayLike, eps: float, max_iterations: 
     return result, latencies, avg_corr
 
 
-def __get_averaged_correlation_coefficients(template: npt.ArrayLike, n_epochs: int, signal_bin: npt.ArrayLike) -> float:
+def __get_averaged_correlation_coefficients(template, n_epochs: int, signal_bin) -> float:
     matrix = np.vstack((template, signal_bin))
     corr_matrix = np.corrcoef(matrix)
 
